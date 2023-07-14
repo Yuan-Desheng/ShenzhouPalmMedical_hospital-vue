@@ -60,6 +60,7 @@
 <script>
 import { isUsername, isPassword } from '../utils/validate.js';
 import router from '../router/index.js';
+import {ElMessage} from "element-plus";
 export default {
     data: function() {
         return {
@@ -74,7 +75,42 @@ export default {
     },
 
     methods: {
-        
+        login:function (){
+            let that = this;
+            if(!isUsername(that.username)){
+                ElMessage({
+                    message:"用户名格式不正确",
+                    type:"error",
+                    duration:1200,
+                })
+            }else if (!isPassword(that.passsword)){
+                ElMessage({
+                    message:"密码不正确",
+                    type:"error",
+                    duration:1200,
+                })
+            } else {
+                let data = {username:that.username,password:that.password};
+
+                that.$http('/mis_user/login','POST',data,true,function (resp){
+                    if (resp.result){
+                        let permissions = resp.permissions;
+
+                        let token = resp.token;
+                        localStorage.setItem('permissions',permissions);
+                        localStorage.setItem('token',token);
+
+                        router.push({name:'Home'})
+                    } else {
+                        ElMessage({
+                            message:"登录失败",
+                            type:"error",
+                            duration:120,
+                        })
+                    }
+                });
+            }
+        }
     }
 };
 </script>
