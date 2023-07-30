@@ -273,7 +273,7 @@ export default {
         };
     },
     methods: {
-        loadDataList(){
+        loadDataList() {
             let that = this;
             that.dataListLoading = true;
             let json = {在职: 1, 离职: 2, 退休: 3};
@@ -288,24 +288,46 @@ export default {
                 status: json[that.dataForm.status],
                 order: that.dataForm.order,
             };
-            that.$http('/doctor/searchByPage',"POST",data,true,function (){
+            that.$http('/doctor/searchByPage', "POST", data, true, function (resp) {
                 let result = resp.result;
                 let temp = {
                     '1': '在职',
                     '2': '离职',
                     '3': '退休',
                 };
-                for(let one of result.list){
+                for (let one of result.list) {
                     one.status = temp[one.status + ''];
-                    that.datalist = result.list;
-                    that.totalCount = result.totalCount;
-                    that.dataListLoading = result.false;
                 }
+                that.datalist = result.list.map((item) => item.D);
+                console.log(that.datalist,"that.datalist")
+                that.totalCount = result.totalCount;
+                that.dataListLoading = false;
+            });
+        },
+
+        loadMedicalDeptList() {
+            let that = this;
+            let data = {};
+            that.$http('/medical/dept/searchAll', 'GET', data, true, function (resp) {
+                that.medicalDeptList = resp.result;
             })
+        },
+
+        sizeChangeHandle(val) {
+            this.pageSize = val;
+            this.pageIndex = 1;
+            this.loadDataList();
+        },
+
+        currentChangeHandle(val){
+            this.pageIndex = val;
+            this.loadDataList();
         }
     },
-    created: function() {
-        
+    async created() {
+        await this.loadMedicalDeptList();
+        await this.loadDataList();
+        console.log(this.dataList,"this.dataList")
     }
 };
 </script>
