@@ -17,7 +17,16 @@ module.exports = {
         //是否弹出浏览器
         open: false,
         //允许跨域
-        cors: true
+        cors: true,
+        //
+        // proxy: {
+        //     // 带选项写法：http://localhost:5173/api/bar -> http://jsonplaceholder.typicode.com/bar
+        //     "/api": {
+        //         target: "http://ceshi13.dishait.cn",
+        //         changeOrigin: true,
+        //         rewrite: (path) => path.replace(/^\/api/, ""),
+        //     },
+        // },
     },
     plugins: [
         vue(),

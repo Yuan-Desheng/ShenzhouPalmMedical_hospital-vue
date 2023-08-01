@@ -324,10 +324,9 @@ export default {
             this.loadDataList();
         }
     },
-    async created() {
-        await this.loadMedicalDeptList();
-        await this.loadDataList();
-        console.log(this.dataList,"this.dataList")
+    created() {
+        this.loadMedicalDeptList();
+        this.loadDataList();
     }
 };
 </script>
