@@ -12,6 +12,11 @@ import {
 
 module.exports = {
     base: '/hospital-vue',
+    resolve: {
+        alias: {
+            "~": path.resolve(__dirname, "src"),
+        },
+    },
     server: {
         port: 3000,
         //是否弹出浏览器

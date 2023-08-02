@@ -226,6 +226,8 @@
 
 <script>
 import AddOrUpdate from './doctor-add-or-update.vue';
+import {searchByPage} from "~/api/doctor";
+
 export default {
     components: {
         AddOrUpdate
@@ -273,7 +275,7 @@ export default {
         };
     },
     methods: {
-        loadDataList() {
+        async loadDataList() {
             let that = this;
             that.dataListLoading = true;
             let json = {在职: 1, 离职: 2, 退休: 3};
@@ -288,6 +290,7 @@ export default {
                 status: json[that.dataForm.status],
                 order: that.dataForm.order,
             };
+
             that.$http('/doctor/searchByPage', "POST", data, true, function (resp) {
                 let result = resp.result;
                 let temp = {
@@ -298,11 +301,30 @@ export default {
                 for (let one of result.list) {
                     one.status = temp[one.status + ''];
                 }
-                that.datalist = result.list.map((item) => item.D);
-                console.log(that.datalist,"that.datalist")
+                that.dataList = result.list.map((item) => item.D);
                 that.totalCount = result.totalCount;
                 that.dataListLoading = false;
             });
+
+            // const response = await searchByPage(data);
+            //
+            // let result = response.result;
+            // let temp = {
+            //     '1': '在职',
+            //     '2': '离职',
+            //     '3': '退休',
+            // };
+            // for (let one of result.list) {
+            //     one.status = temp[one.status + ''];
+            // }
+            // // this.dataList = result.list.map((item) => item.D);
+            // // this.dataList = [{
+            // //     "name": "程淳美",
+            // // }];
+            // that.totalCount = result.totalCount;
+            // that.dataListLoading = false;
+            //
+
         },
 
         loadMedicalDeptList() {
