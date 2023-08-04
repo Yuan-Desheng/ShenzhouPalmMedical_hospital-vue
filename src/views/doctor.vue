@@ -341,10 +341,38 @@ export default {
             this.loadDataList();
         },
 
-        currentChangeHandle(val){
+        currentChangeHandle(val) {
             this.pageIndex = val;
             this.loadDataList();
-        }
+        },
+
+        // 展示医生信息
+        expand(row,expandedRows) {
+            let that = this;
+            if (expandedRows.length > 0) {
+                that.expands = [];
+                that.expands.push(row.id);
+                let data = {
+                    id: row.id,
+                };
+                that.$http("/doctor/searchContent", "POST", data, false, function (resp) {
+                    that.content.id = resp.result.id;
+                    that.content.photo = `${that.$minioUrl}${resp.result.photo}?random=${Math.random()}`;
+                    that.content.pid = resp.result.pid;
+                    that.content.birthday = resp.result.birthday;
+                    that.content.uuid = resp.result.uuid;
+                    that.content.hiredate = resp.result.hiredate;
+                    that.content.email = resp.result.email;
+                    that.content.remark = resp.result.remark;
+                    that.content.tag = resp.result.tag;
+                    that.content.address = resp.result.address;
+                    that.content.description = resp.result.description;
+                });
+            }
+            else {
+                that.expands = [];
+            }
+        },
     },
     created() {
         this.loadMedicalDeptList();
