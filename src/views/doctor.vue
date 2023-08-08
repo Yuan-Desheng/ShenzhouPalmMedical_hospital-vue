@@ -227,6 +227,7 @@
 <script>
 import AddOrUpdate from './doctor-add-or-update.vue';
 import {searchByPage} from "~/api/doctor";
+import {ElMessage} from "element-plus";
 
 export default {
     components: {
@@ -303,8 +304,8 @@ export default {
                     one.status = temp[one.status + ''];
                 }
                 // that.dataList = result.list.map((item) => item.D);
-                that.dataList = result.list.map(({D, MD, DS}) => ({...D, deptName:MD.name, subName: DS.name}));
-                console.log(that.dataList,"that.dataList")
+                that.dataList = result.list.map(({D, MD, DS}) => ({...D, deptName: MD.name, subName: DS.name}));
+                console.log(that.dataList, "that.dataList")
                 that.totalCount = result.totalCount;
                 that.dataListLoading = false;
             });
@@ -379,7 +380,7 @@ export default {
         },
 
         // 展示医生信息
-        expand(row,expandedRows) {
+        expand(row, expandedRows) {
             let that = this;
             if (expandedRows.length > 0) {
                 that.expands = [];
@@ -400,11 +401,23 @@ export default {
                     that.content.address = resp.result.address;
                     that.content.description = resp.result.description;
                 });
-            }
-            else {
+            } else {
                 that.expands = [];
             }
         },
+
+        // 上传文件
+        updatePhotoSuccess() {
+            this.content.photo = `this.${minioUrl}/doctro/doctor-${this.contentid}.jpg?random=${Math.random()}`
+        },
+        // 上传文件失败
+        updatePhotoErro(){
+            ElMessage.error({
+                message: "文件上传失败",
+                type: "error",
+                duration: 1200
+            });
+        }
     },
     created() {
         this.loadMedicalDeptList();
