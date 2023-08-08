@@ -275,6 +275,7 @@ export default {
         };
     },
     methods: {
+        // 查询医护人员列表数据
         async loadDataList() {
             let that = this;
             that.dataListLoading = true;
@@ -301,7 +302,9 @@ export default {
                 for (let one of result.list) {
                     one.status = temp[one.status + ''];
                 }
-                that.dataList = result.list.map((item) => item.D);
+                // that.dataList = result.list.map((item) => item.D);
+                that.dataList = result.list.map(({D, MD, DS}) => ({...D, deptName:MD.name, subName: DS.name}));
+                console.log(that.dataList,"that.dataList")
                 that.totalCount = result.totalCount;
                 that.dataListLoading = false;
             });
@@ -327,6 +330,7 @@ export default {
 
         },
 
+        // 查询科室数据
         loadMedicalDeptList() {
             let that = this;
             let data = {};
@@ -343,6 +347,34 @@ export default {
 
         currentChangeHandle(val) {
             this.pageIndex = val;
+            this.loadDataList();
+        },
+
+        searchHandle() {
+            this.$refs['dataForm'].validate(valid => {
+                if (valid) {
+                    this.$refs['dataForm'].clearValidate();
+                    if (this.pageIndex != 1) {
+                        this.pageIndex = 1;
+                    }
+                    this.loadDataList();
+                } else {
+                    return false;
+                }
+            })
+        },
+
+        orderHandle(param) {
+            let prop = param.prop;
+            let order = param.order;
+            if (order == "ascending") {
+                this.dataForm.order = 'ASC';
+            } else if (order == 'descending') {
+                this.dataForm.order = 'DESC';
+            } else {
+                return;
+            }
+            this.dataList = [];
             this.loadDataList();
         },
 
