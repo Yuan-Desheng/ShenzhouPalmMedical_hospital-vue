@@ -408,7 +408,7 @@ export default {
 
         // 上传文件
         updatePhotoSuccess() {
-            this.content.photo = `this.${minioUrl}/doctro/doctor-${this.contentid}.jpg?random=${Math.random()}`
+            this.content.photo = `${this.$minioUrl}/doctro/doctor-${this.contentid}.jpg?random=${Math.random()}`
         },
         // 上传文件失败
         updatePhotoErro(){
